@@ -1,0 +1,1 @@
+This is a fun calculator to make it less boring todo math i grew up using desmos so i made it funner with features eveyone will like theres the stock theme and theres custom made ones theres even a hidden one if u find the button... enjoy!!!!
