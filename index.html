@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JZL Four Function Calculator</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .auto-clear-btn {
+            margin-top: 18px;
+            width: 100%;
+            padding: 10px 0;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            border: 2px solid #FFD700;
+            background: #111;
+            color: #FFD700;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, border 0.2s;
+        }
+        .math-btn {
+            position:fixed;
+            top:24px;
+            right:24px;
+            z-index:1000;
+            background:#111;
+            border:2px solid #FFD700;
+            color:#FFD700;
+            font-size:1.1rem;
+            padding:14px 18px;
+            border-radius:12px;
+            cursor:pointer;
+            box-shadow:0 0 8px #FFD70055;
+            transition: background 0.2s, color 0.2s, border 0.2s;
+        }
+        body.classic .auto-clear-btn {
+            border: 2px solid #222;
+            background: #fff;
+            color: #222;
+        }
+        body.classic .math-btn {
+            background: #fff;
+            border: 2px solid #222;
+            color: #222;
+            box-shadow: 0 0 8px #2222;
+        }
+        body.midnight .auto-clear-btn {
+            border: 2px solid #7ecfff;
+            background: #0a1026;
+            color: #7ecfff;
+        }
+        body.midnight .math-btn {
+            background: #0a1026;
+            border: 2px solid #7ecfff;
+            color: #7ecfff;
+            box-shadow: 0 0 8px #7ecfff55;
+        }
+        body.emerald .auto-clear-btn {
+            border: 2px solid #50fa7b;
+            background: #0e1e16;
+            color: #50fa7b;
+        }
+        body.emerald .math-btn {
+            background: #0e1e16;
+            border: 2px solid #50fa7b;
+            color: #50fa7b;
+            box-shadow: 0 0 8px #50fa7b55;
+        }
+        body.rose .auto-clear-btn {
+            border: 2px solid #ff79c6;
+            background: #2a0e1e;
+            color: #ff79c6;
+        }
+        body.rose .math-btn {
+            background: #2a0e1e;
+            border: 2px solid #ff79c6;
+            color: #ff79c6;
+            box-shadow: 0 0 8px #ff79c655;
+        }
+        .corner-box {
+            position: fixed;
+            top: 24px;
+            left: 24px;
+            z-index: 1001;
+            background: #181818cc;
+            border: 2px solid #FFD700;
+            border-radius: 14px;
+            padding: 14px 22px;
+            box-shadow: 0 0 12px #FFD70044;
+            min-width: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .corner-title {
+            color: #FFD700;
+            font-size: 1.1rem;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+        body.classic .corner-box {
+            background: #fff;
+            border: 2px solid #222;
+            box-shadow: 0 0 8px #2222;
+        }
+        body.classic .corner-title {
+            color: #222;
+        }
+        body.midnight .corner-box {
+            background: #0a1026cc;
+            border: 2px solid #7ecfff;
+            box-shadow: 0 0 12px #7ecfff44;
+        }
+        body.midnight .corner-title {
+            color: #7ecfff;
+        }
+        body.emerald .corner-box {
+            background: #0e1e16cc;
+            border: 2px solid #50fa7b;
+            box-shadow: 0 0 12px #50fa7b44;
+        }
+        body.emerald .corner-title {
+            color: #50fa7b;
+        }
+        body.rose .corner-box {
+            background: #2a0e1ecc;
+            border: 2px solid #ff79c6;
+            box-shadow: 0 0 12px #ff79c644;
+        }
+        body.rose .corner-title {
+            color: #ff79c6;
+        }
+        .customize-toggle-btn {
+            margin-top: 10px;
+            width: 100%;
+            padding: 8px 0;
+            font-size: 1.05rem;
+            border-radius: 8px;
+            border: 2px solid #FFD700;
+            background: #111;
+            color: #FFD700;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, border 0.2s;
+        }
+        body.classic .customize-toggle-btn {
+            border: 2px solid #222;
+            background: #fff;
+            color: #222;
+        }
+        body.midnight .customize-toggle-btn {
+            border: 2px solid #7ecfff;
+            background: #0a1026;
+            color: #7ecfff;
+        }
+        body.emerald .customize-toggle-btn {
+            border: 2px solid #50fa7b;
+            background: #0e1e16;
+            color: #50fa7b;
+        }
+        body.rose .customize-toggle-btn {
+            border: 2px solid #ff79c6;
+            background: #2a0e1e;
+            color: #ff79c6;
+        }
+        .customize-panel {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2000;
+            background: #222d;
+            border: 2px solid #FFD700;
+            border-radius: 14px;
+            padding: 18px 22px 12px 22px;
+            box-shadow: 0 0 32px #FFD70088;
+            min-width: 260px;
+            color: #FFD700;
+            font-size: 1rem;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            display: none;
+            flex-direction: column;
+            gap: 8px;
+            animation: popup-fadein 0.2s;
+        }
+        .customize-panel.open {
+            display: flex;
+        }
+        @keyframes popup-fadein {
+            from { opacity: 0; transform: translate(-50%, -60%); }
+            to { opacity: 1; transform: translate(-50%, -50%); }
+        }
+        .customize-panel .close-btn {
+            align-self: flex-end;
+            background: none;
+            border: none;
+            color: inherit;
+            font-size: 1.3rem;
+            cursor: pointer;
+            margin-bottom: 4px;
+        }
+        /* Patterns */
+        body.bg-dots {
+            background-image: radial-gradient(var(--accent, #FFD700) 1.5px, transparent 1.5px);
+            background-size: 18px 18px;
+        }
+        body.bg-stripes {
+            background-image: repeating-linear-gradient(135deg, var(--accent, #FFD700) 0 2px, transparent 2px 12px);
+        }
+        body.bg-grid {
+            background-image: linear-gradient(var(--accent, #FFD700) 1.5px, transparent 1.5px), linear-gradient(90deg, var(--accent, #FFD700) 1.5px, transparent 1.5px);
+            background-size: 18px 18px;
+        }
+    body.bg-diagonal {
+        background-image: repeating-linear-gradient(135deg, var(--accent, #FFD700) 0 2px, transparent 2px 16px);
+    }
+    body.bg-waves {
+        background-image: repeating-radial-gradient(circle at 0 100%, var(--accent, #FFD700) 0 2px, transparent 2px 20px);
+    }
+    body.bg-zigzag {
+        background-image: repeating-linear-gradient(135deg, var(--accent, #FFD700) 0 2px, transparent 2px 10px), repeating-linear-gradient(-135deg, var(--accent, #FFD700) 0 2px, transparent 2px 10px);
+    }
+    body.bg-cross {
+        background-image: repeating-linear-gradient(0deg, var(--accent, #FFD700) 0 2px, transparent 2px 16px), repeating-linear-gradient(90deg, var(--accent, #FFD700) 0 2px, transparent 2px 16px);
+    }
+    .keybinds-modal {
+        position: fixed;
+        left: 0; top: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 3000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .keybinds-content {
+        background: #181818;
+        border: 2px solid #FFD700;
+        border-radius: 14px;
+        padding: 24px 32px 18px 32px;
+        color: #FFD700;
+        min-width: 260px;
+        box-shadow: 0 0 32px #FFD70088;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        position: relative;
+    }
+    .keybinds-content h3 {
+        margin-top: 0;
+        text-align: center;
+    }
+    .keybinds-content label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 1.18rem;
+    }
+    .keybinds-content input[type="text"] {
+        font-size: 1.18rem;
+        padding: 3px 8px;
+        border-radius: 6px;
+        border: 1.5px solid #FFD700;
+        background: #222;
+        color: #FFD700;
+        width: 2.5em;
+        text-align: center;
+        margin-left: 6px;
+    }
+    .keybinds-content .close-btn {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        background: none;
+        border: none;
+        color: inherit;
+        font-size: 1.3rem;
+        cursor: pointer;
+    }
+    .disco-btn {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #888;
+        border: 2px solid #444;
+        margin-left: 10px;
+        cursor: pointer;
+        box-shadow: 0 0 4px #0004;
+        transition: background 0.2s, box-shadow 0.2s;
+        display: inline-block;
+        vertical-align: middle;
+    }
+    .disco-btn.active {
+        background: repeating-conic-gradient(from 0deg, #fff 0 10deg, #f00 10deg 20deg, #0f0 20deg 30deg, #00f 30deg 40deg, #ff0 40deg 50deg, #0ff 50deg 60deg, #f0f 60deg 70deg, #fff 70deg 80deg);
+        box-shadow: 0 0 12px #fff, 0 0 24px #f0f, 0 0 32px #0ff;
+    }
+    body.disco {
+        animation: disco-bg 0.5s linear infinite;
+    }
+    @keyframes disco-bg {
+        0% { background-color: #111; }
+        20% { background-color: #f00; }
+        40% { background-color: #0f0; }
+        60% { background-color: #00f; }
+        80% { background-color: #ff0; }
+        100% { background-color: #111; }
+    }
+    </style>
+</head>
+<body>
+    <div class="corner-box">
+        <div class="corner-title">Made by Zane Lampkins &copy;</div>
+        <button id="disco-btn" title="Disco Mode" class="disco-btn" style="position:absolute;top:-10px;left:-10px;width:16px;height:16px;"></button>
+    </div>
+    <button id="math-btn" class="math-btn">Open Math Calculator</button>
+    <div style="display:flex;flex-direction:row;align-items:flex-start;gap:24px;">
+        <div style="flex:1;">
+            <div class="decorative-border">
+                <div class="theme-selector">
+                    <label for="theme">Theme:</label>
+                    <select id="theme">
+                        <option value="black-gold">Black & Gold</option>
+                        <option value="classic">Classic</option>
+                        <option value="midnight">Midnight Blue</option>
+                        <option value="emerald">Emerald Green</option>
+                        <option value="rose">Rose Quartz</option>
+                    </select>
+                </div>
+                <div class="calculator-type-selector">
+                    <label for="calc-type">Calculator:</label>
+                    <select id="calc-type">
+                        <option value="basic">Basic</option>
+                        <option value="scientific">Scientific</option>
+                        <option value="programmer">Programmer</option>
+                        <option value="fraction">Fraction</option>
+                        <option value="currency">Currency Converter</option>
+                        <option value="date">Date Calculator</option>
+                    </select>
+                </div>
+                <div id="calculator-container"></div>
+                <button id="auto-clear" class="auto-clear-btn">Auto Clear</button>
+                <button id="customize-toggle" class="customize-toggle-btn">⚙️ Customize</button>
+            </div>
+        </div>
+    </div>
+    <div class="customize-panel" id="customize-panel">
+        <button class="close-btn" id="customize-close" title="Close">✖️</button>
+        <h3>Customize</h3>
+        <label>Font:
+            <select id="font-family">
+                <option value="'Segoe UI', Arial, sans-serif">Default</option>
+                <option value="'Courier New', Courier, monospace">Monospace</option>
+                <option value="'Comic Sans MS', cursive, sans-serif">Comic Sans</option>
+                <option value="'Times New Roman', Times, serif">Times New Roman</option>
+                <option value="'Fira Code', monospace">Fira Code</option>
+                <option value="'New Roman', serif">New Roman</option>
+            </select>
+        </label>
+        <label>Border Style:
+            <select id="border-style">
+                <option value="double">Double</option>
+                <option value="solid">Solid</option>
+                <option value="dashed">Dashed</option>
+                <option value="dotted">Dotted</option>
+                <option value="groove">Groove</option>
+                <option value="ridge">Ridge</option>
+                <option value="inset">Inset</option>
+                <option value="outset">Outset</option>
+                <option value="none">None</option>
+            </select>
+        </label>
+        <label>Corner Radius:
+            <input id="corner-radius" type="range" min="0" max="48" value="32" />
+        </label>
+        <label>Shadow:
+            <input id="shadow-toggle" type="checkbox" checked />
+        </label>
+        <label>Accent Color:
+            <input id="accent-color" type="color" value="#FFD700" />
+        </label>
+        <label>Pattern Color:
+            <input id="pattern-color" type="color" value="#FFD700" />
+        </label>
+        <label>Calculator Size:
+            <select id="calc-size">
+                <option value="medium">Medium</option>
+                <option value="small">Small</option>
+                <option value="large">Large</option>
+            </select>
+        </label>
+        <label>Background Pattern:
+            <select id="bg-pattern">
+                <option value="none">None</option>
+                <option value="dots">Dots</option>
+                <option value="stripes">Stripes</option>
+                <option value="grid">Grid</option>
+                <option value="diagonal">Diagonal Lines</option>
+                <option value="waves">Waves</option>
+                <option value="zigzag">Zigzag</option>
+                <option value="cross">Crosshatch</option>
+            </select>
+        </label>
+        <label>Background Color:
+            <input id="bg-color" type="color" value="#111111" />
+        </label>
+        <label>Keybinds:
+            <button id="keybinds-btn" type="button" style="margin-left:8px;padding:4px 10px;font-size:1rem;border-radius:6px;border:2px solid #FFD700;background:#111;color:#FFD700;cursor:pointer;">Edit Keybinds</button>
+        </label>
+    </div>
+    <div class="keybinds-modal" id="keybinds-modal" style="display:none;">
+        <div class="keybinds-content">
+            <button class="close-btn" id="keybinds-close" title="Close">✖️</button>
+            <h3>Edit Keybinds</h3>
+            <form id="keybinds-form">
+                <label>Multiply (×): <input id="key-mul" type="text" maxlength="1" value="*" autocomplete="off" /></label><br>
+                <label>Divide (÷): <input id="key-div" type="text" maxlength="1" value="/" autocomplete="off" /></label><br>
+                <label>Add (+): <input id="key-add" type="text" maxlength="1" value="+" autocomplete="off" /></label><br>
+                <label>Subtract (−): <input id="key-sub" type="text" maxlength="1" value="-" autocomplete="off" /></label><br>
+                <button type="submit" style="margin-top:10px;padding:6px 16px;font-size:1rem;border-radius:6px;border:2px solid #FFD700;background:#111;color:#FFD700;cursor:pointer;">Save</button>
+            </form>
+        </div>
+    </div>
+    <script src="app.js"></script>
+    <script>
+    document.getElementById('math-btn').onclick = function() {
+        window.open('https://www.desmos.com/fourfunction', '_blank');
+    };
+    // Customization logic
+const root = document.documentElement;
+const calcBorder = document.querySelector('.decorative-border');
+const customize = document.querySelector('.customize-panel');
+const titleBox = document.querySelector('.corner-box');
+
+document.getElementById('font-family').onchange = e => {
+    document.body.style.fontFamily = e.target.value;
+};
+document.getElementById('border-style').onchange = e => {
+    calcBorder.style.borderStyle = e.target.value;
+};
+document.getElementById('corner-radius').oninput = e => {
+    calcBorder.style.borderRadius = e.target.value + 'px';
+};
+document.getElementById('shadow-toggle').onchange = e => {
+    calcBorder.style.boxShadow = e.target.checked ? '0 0 32px var(--accent, #FFD70055), 0 0 0 12px #111 inset' : 'none';
+};
+document.getElementById('accent-color').oninput = e => {
+    root.style.setProperty('--accent', e.target.value);
+    calcBorder.style.borderColor = e.target.value;
+    customize.style.borderColor = e.target.value;
+};
+document.getElementById('pattern-color').oninput = e => {
+    root.style.setProperty('--accent', e.target.value);
+};
+document.getElementById('calc-size').onchange = e => {
+    calcBorder.style.minWidth = e.target.value === 'small' ? '250px' : e.target.value === 'large' ? '500px' : '350px';
+};
+document.getElementById('bg-pattern').onchange = e => {
+    document.body.classList.remove('bg-dots', 'bg-stripes', 'bg-grid', 'bg-diagonal', 'bg-waves', 'bg-zigzag', 'bg-cross');
+    if (e.target.value !== 'none') document.body.classList.add('bg-' + e.target.value);
+};
+document.getElementById('bg-color').oninput = e => {
+    document.body.style.backgroundColor = e.target.value;
+};
+document.getElementById('customize-toggle').onclick = function() {
+    document.getElementById('customize-panel').classList.add('open');
+};
+document.getElementById('customize-close').onclick = function() {
+    document.getElementById('customize-panel').classList.remove('open');
+};
+// Keybinds logic
+const keybindsBtn = document.getElementById('keybinds-btn');
+const keybindsModal = document.getElementById('keybinds-modal');
+const keybindsClose = document.getElementById('keybinds-close');
+const keybindsForm = document.getElementById('keybinds-form');
+const keyMul = document.getElementById('key-mul');
+const keyDiv = document.getElementById('key-div');
+const keyAdd = document.getElementById('key-add');
+const keySub = document.getElementById('key-sub');
+
+let customKeybinds = {
+    '*': '*',
+    '/': '/',
+    '+': '+',
+    '-': '-',
+};
+
+keybindsBtn.onclick = () => {
+    keybindsModal.style.display = 'flex';
+};
+keybindsClose.onclick = () => {
+    keybindsModal.style.display = 'none';
+};
+keybindsForm.onsubmit = (e) => {
+    e.preventDefault();
+    customKeybinds['*'] = keyMul.value || '*';
+    customKeybinds['/'] = keyDiv.value || '/';
+    customKeybinds['+'] = keyAdd.value || '+';
+    customKeybinds['-'] = keySub.value || '-';
+    keybindsModal.style.display = 'none';
+};
+// Patch handleKey to use custom keybinds
+const origHandleKey = handleKey;
+window.handleKey = function(e) {
+    let key = e.key;
+    if (key === customKeybinds['*']) key = '*';
+    else if (key === customKeybinds['/']) key = '/';
+    else if (key === customKeybinds['+']) key = '+';
+    else if (key === customKeybinds['-']) key = '-';
+    e = new Proxy(e, { get: (t, p) => p === 'key' ? key : t[p] });
+    origHandleKey(e);
+};
+document.removeEventListener('keydown', origHandleKey);
+document.addEventListener('keydown', window.handleKey);
+    // Disco mode logic
+const discoBtn = document.getElementById('disco-btn');
+let discoActive = false;
+let discoInterval = null;
+
+const getDiscoColors = () => ['#f00','#0f0','#00f','#ff0','#0ff','#f0f','#fff'];
+
+function setCalculatorDiscoColors(color) {
+    // Set calculator background and border to match disco color
+    const calc = document.querySelector('.decorative-border');
+    if (calc) {
+        calc.style.background = color;
+        calc.style.borderColor = color;
+        // Also update calculator inner backgrounds
+        const calcs = calc.querySelectorAll('.calculator, .display, .buttons');
+        calcs.forEach(el => {
+            el.style.background = color;
+            el.style.borderColor = color;
+        });
+    }
+}
+
+discoBtn.onclick = function() {
+    discoActive = !discoActive;
+    discoBtn.classList.toggle('active', discoActive);
+    document.body.classList.toggle('disco', discoActive);
+    if (discoActive) {
+        let colors = getDiscoColors();
+        let i = 0;
+        discoInterval = setInterval(() => {
+            const color = colors[i % colors.length];
+            document.body.style.backgroundColor = color;
+            setCalculatorDiscoColors(color);
+            i++;
+        }, 120);
+    } else {
+        clearInterval(discoInterval);
+        document.body.classList.remove('disco');
+        document.body.style.backgroundColor = document.getElementById('bg-color').value || '#111';
+        // Reset calculator background and border
+        const calc = document.querySelector('.decorative-border');
+        if (calc) {
+            calc.style.background = '';
+            calc.style.borderColor = '';
+            const calcs = calc.querySelectorAll('.calculator, .display, .buttons');
+            calcs.forEach(el => {
+                el.style.background = '';
+                el.style.borderColor = '';
+            });
+        }
+    }
+};
+    </script>
+</body>
+</html>
